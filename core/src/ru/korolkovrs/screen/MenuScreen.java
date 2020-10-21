@@ -2,98 +2,62 @@ package ru.korolkovrs.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.korolkovrs.base.BaseScreen;
+import ru.korolkovrs.math.Rect;
+import ru.korolkovrs.sprite.Background;
+import ru.korolkovrs.sprite.Ground;
+import ru.korolkovrs.sprite.Plane;
 
 public class MenuScreen extends BaseScreen {
-    private int VELOCITY = 10;
-
-    private Texture img;
-    private Texture background;
-    private Texture ground;
-
-    private Vector2 planePosition;
-    private Vector2 targetPosition;
-    private Vector2 planeDirectional;
-    private Vector2 planeVelocity;
-    private Vector2 distance;
+    private Texture bg;
+    private Texture gr;
+    private Texture pl;
+    private Background background;
+    private Ground ground;
+    private Plane plane;
 
     @Override
     public void show() {
         super.show();
-        img = new Texture("yellowPlane.png");
-        background = new Texture("background.png");
-        ground = new Texture("groundDirt.png");
-        planePosition = new Vector2(100, 100);
-        targetPosition = new Vector2(planePosition);
-        planeDirectional = new Vector2();
-        planeVelocity = new Vector2();
-        distance = new Vector2();
+        bg = new Texture("textures\\background.png");
+        gr = new Texture("textures\\groundDirt.png");
+        pl = new Texture("textures\\yellowPlane.png");
+        background = new Background(new TextureRegion(bg));
+        ground = new Ground(new TextureRegion(gr));
+        plane = new Plane(new TextureRegion(pl));
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
         batch.begin();
-        drawBackground();
-        drawGround();
-        drawPlane();
+        background.draw(batch);
+        ground.draw(batch);
+        plane.draw(batch);
         batch.end();
     }
 
     @Override
+    public void resize(Rect worldBounds) {
+        background.resize(worldBounds);
+        ground.resize(worldBounds);
+        plane.resize(worldBounds);
+    }
+
+    @Override
     public void dispose() {
+        bg.dispose();
+        gr.dispose();
+        pl.dispose();
         super.dispose();
     }
 
     @Override
-    public boolean keyDown(int keycode) {
-        return super.keyDown(keycode);
-    }
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        targetPosition.set(screenX, Gdx.graphics.getHeight() - screenY);
-        reset();
-        calculatePlaneMotion();
-        return super.touchDown(screenX, screenY, pointer, button);
-    }
-
-    private void drawBackground() {
-        batch.draw(background, 0,0);
-    }
-
-    private void drawGround() {
-        batch.draw(ground, 0,0);
-    }
-
-    private void drawPlane() {
-        if (!planePosition.equals(targetPosition)) {
-            System.out.println("pp = " + planePosition + " tp = " + targetPosition);
-            if (distance.set(targetPosition).sub(planePosition).len() >= VELOCITY) {
-                planePosition = planePosition.add(planeVelocity);
-                System.out.println("apd = " + planePosition);
-            } else {
-                System.out.println("trigger!");
-                planePosition.set(targetPosition);
-                reset();
-            }
-        }
-        batch.draw(img, planePosition.x, planePosition.y);
-    }
-
-    private void calculatePlaneMotion() {
-        System.out.println("tp = " + targetPosition);
-        planeDirectional.set(targetPosition).sub(planePosition).nor();
-        planeVelocity.add(planeDirectional).scl(VELOCITY);
-        System.out.println("v= " + planeVelocity);
-        System.out.println("Plane dir = " + planeDirectional);
-    }
-
-    private void reset() {
-        planeDirectional.set(0, 0);
-        planeVelocity.set(0,0);
-        distance.set(0,0);
+    public boolean touchDown(Vector2 touch, int pointer, int button) {
+        plane.touchDown(touch, pointer, button);
+        return false;
     }
 }
