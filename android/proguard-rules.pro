@@ -28,6 +28,7 @@
 -dontwarn com.badlogic.gdx.jnigen.BuildTarget*
 -dontwarn com.badlogic.gdx.graphics.g2d.freetype.FreetypeBuild
 
+#noinspection ShrinkerUnresolvedReference
 -keep class com.badlogic.gdx.controllers.android.AndroidControllers
 
 -keepclassmembers class com.badlogic.gdx.backends.android.AndroidInput* {
