@@ -105,6 +105,8 @@ public class MenuScreen extends BaseScreen {
         for (Cloud cloud : clouds) {
             cloud.update(delta);
         }
+
+        ground.update(delta);
     }
 
     private void draw() {
