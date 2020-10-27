@@ -1,7 +1,5 @@
 package ru.korolkovrs.screen;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -11,16 +9,13 @@ import ru.korolkovrs.base.BaseScreen;
 import ru.korolkovrs.math.Rect;
 import ru.korolkovrs.sprite.Background;
 import ru.korolkovrs.sprite.Cloud;
-import ru.korolkovrs.sprite.ExitButton;
 import ru.korolkovrs.sprite.Ground;
+import ru.korolkovrs.sprite.Joystick;
 import ru.korolkovrs.sprite.Plane;
-import ru.korolkovrs.sprite.PlayButton;
 
-public class MenuScreen extends BaseScreen {
+public class GameScreen extends BaseScreen {
 
     private static final int CLOUD_COUNT = 8;
-
-    private Game game;
 
     private TextureAtlas atlas;
     private Texture bg;
@@ -30,18 +25,13 @@ public class MenuScreen extends BaseScreen {
     private Ground ground;
 
     private Cloud[] clouds;
-    private ExitButton exitButton;
-    private PlayButton playButton;
     private Plane plane;
-
-    public MenuScreen(Game game) {
-        this.game = game;
-    }
+    private Joystick joy;
 
     @Override
     public void show() {
         super.show();
-        atlas = new TextureAtlas("textures\\menuAtlas.atlas");
+        atlas = new TextureAtlas("textures\\mainAtlas.pack");
         bg = new Texture("textures\\background.png");
         gr = new Texture("textures\\groundDirt.png");
 
@@ -53,9 +43,8 @@ public class MenuScreen extends BaseScreen {
             clouds[i] = new Cloud(atlas);
         }
 
-        exitButton = new ExitButton(atlas);
-        playButton = new PlayButton(atlas, game);
         plane = new Plane(atlas);
+        joy = new Joystick(atlas, this.plane);
     }
 
     @Override
@@ -73,10 +62,8 @@ public class MenuScreen extends BaseScreen {
         for (Cloud cloud : clouds) {
             cloud.resize(worldBounds);
         }
-
-        exitButton.resize(worldBounds);
-        playButton.resize(worldBounds);
         plane.resize(worldBounds);
+        joy.resize(worldBounds);
     }
 
     @Override
@@ -88,17 +75,35 @@ public class MenuScreen extends BaseScreen {
     }
 
     @Override
+    public boolean keyDown(int keycode) {
+        return super.keyDown(keycode);
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return super.keyTyped(character);
+    }
+
+        @Override
     public boolean touchDown(Vector2 touch, int pointer, int button) {
-        exitButton.touchDown(touch, pointer, button);
-        playButton.touchDown(touch, pointer, button);
+        joy.touchDown(touch, pointer, button);
         return false;
     }
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer, int button) {
-        exitButton.touchUp(touch, pointer, button);
-        playButton.touchUp(touch, pointer, button);
+        joy.touchUp(touch, pointer, button);
         return false;
+    }
+
+    @Override
+    public boolean touchDragged(Vector2 touch, int pointer) {
+        joy.touchDragged(touch, pointer);
+        return false;
+    }
+
+    public void checkCollision() {
+
     }
 
     private void update(float delta) {
@@ -116,9 +121,8 @@ public class MenuScreen extends BaseScreen {
             cloud.draw(batch);
         }
 
-        exitButton.draw(batch);
         plane.draw(batch);
-        playButton.draw(batch);
+        joy.draw(batch);
         batch.end();
     }
 }
