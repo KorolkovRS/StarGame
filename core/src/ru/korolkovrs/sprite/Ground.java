@@ -2,6 +2,7 @@ package ru.korolkovrs.sprite;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
@@ -15,8 +16,8 @@ public class Ground extends Sprite {
     private float yDistance;
     private Vector2 x_velocity;
 
-    public Ground(TextureRegion region) {
-        super(region);
+    public Ground(TextureAtlas atlas) {
+        super(atlas.findRegion("groundDirt"));
         x_velocity = new Vector2(-1f, 0).scl(VELOCITY);
     }
 

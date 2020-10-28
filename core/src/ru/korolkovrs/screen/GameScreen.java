@@ -20,7 +20,6 @@ public class GameScreen extends BaseScreen {
 
     private TextureAtlas atlas;
     private Texture bg;
-    private Texture gr;
 
     private Background background;
     private Ground ground;
@@ -35,10 +34,9 @@ public class GameScreen extends BaseScreen {
         super.show();
         atlas = new TextureAtlas("textures\\mainAtlas.pack");
         bg = new Texture("textures\\background.png");
-        gr = new Texture("textures\\groundDirt.png");
 
         background = new Background(new TextureRegion(bg));
-        ground = new Ground(new TextureRegion(gr));
+        ground = new Ground(atlas);
 
         clouds = new Cloud[CLOUD_COUNT];
         for (int i = 0; i < clouds.length; i++) {
@@ -73,9 +71,9 @@ public class GameScreen extends BaseScreen {
     @Override
     public void dispose() {
         bg.dispose();
-        gr.dispose();
         atlas.dispose();
         bulletPool.dispose();
+        plane.dispose();
         super.dispose();
     }
 

@@ -3,30 +3,37 @@ mainAtlas.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+groundDirt
+  rotate: false
+  xy: 1, 606
+  size: 1616, 71
+  orig: 1616, 71
+  offset: 0, 0
+  index: -1
 joy
   rotate: false
-  xy: 1, 1
+  xy: 1, 124
   size: 480, 480
   orig: 480, 480
   offset: 0, 0
   index: -1
 cloud1
   rotate: false
-  xy: 483, 360
+  xy: 1, 1
   size: 203, 121
   orig: 203, 121
   offset: 0, 0
   index: -1
 yellowPlane
   rotate: false
-  xy: 483, 285
+  xy: 483, 531
   size: 88, 73
   orig: 88, 73
   offset: 0, 0
   index: -1
 myBullet
   rotate: false
-  xy: 688, 417
+  xy: 1619, 613
   size: 64, 64
   orig: 64, 64
   offset: 0, 0

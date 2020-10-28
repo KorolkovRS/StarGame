@@ -1,6 +1,8 @@
 package ru.korolkovrs.sprite;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -14,7 +16,7 @@ import ru.korolkovrs.pool.BulletPool;
 public class Plane extends Sprite {
 
     private static final int SCALE = 10;
-    private static final int RATE_OF_FIRE = 10;
+    private static final int RATE_OF_FIRE = 5;
 
     private Rect worldBounds;
     private Vector2 velocity;
@@ -28,8 +30,11 @@ public class Plane extends Sprite {
     private boolean shootPressed;
     private int rateTimer;
 
+    private Sound barrelSound;
+
     public Plane(TextureAtlas atlas) {
         super(atlas.findRegion("yellowPlane"));
+        barrelSound = Gdx.audio.newSound(Gdx.files.internal("sounds\\bullet.wav"));
     }
 
     public Plane(TextureAtlas atlas, BulletPool bulletPool) {
@@ -90,5 +95,12 @@ public class Plane extends Sprite {
         Bullet bullet = bulletPool.obtain();
         bulletPos.set(getRight(), pos.y);
         bullet.set(this, bulletRegion, bulletPos, bulletV, worldBounds, 1, 0.05f);
+        barrelSound.play(1.0f);
     }
+
+    public void dispose() {
+        barrelSound.dispose();
+    }
+
+
 }
