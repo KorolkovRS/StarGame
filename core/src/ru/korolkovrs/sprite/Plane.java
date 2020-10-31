@@ -8,39 +8,34 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
+import ru.korolkovrs.base.Aircraft;
 import ru.korolkovrs.base.BaseScreen;
 import ru.korolkovrs.base.Sprite;
 import ru.korolkovrs.math.Rect;
 import ru.korolkovrs.pool.BulletPool;
 
-public class Plane extends Sprite {
+public class Plane extends Aircraft {
 
     private static final int SCALE = 10;
-    private static final int RATE_OF_FIRE = 5;
-
-    private Rect worldBounds;
-    private Vector2 velocity;
-
-    private BulletPool bulletPool;
-    private TextureRegion bulletRegion;
-
-    private final Vector2 bulletV = new Vector2(2f, 0);
-    private final Vector2 bulletPos = new Vector2();
+    private static final int HP = 100;
 
     private boolean shootPressed;
-    private int rateTimer;
-
-    private Sound barrelSound;
 
     public Plane(TextureAtlas atlas) {
         super(atlas.findRegion("yellowPlane"));
-        barrelSound = Gdx.audio.newSound(Gdx.files.internal("sounds\\bullet.wav"));
     }
 
     public Plane(TextureAtlas atlas, BulletPool bulletPool) {
-        this(atlas);
+        super(atlas.findRegion("yellowPlane"));
         this.bulletPool = bulletPool;
         this.bulletRegion = atlas.findRegion("myBullet");
+        this.barrelSound = Gdx.audio.newSound(Gdx.files.internal("sounds\\bullet.wav"));
+        this.bulletHeight = 0.05f;
+        this.damage = 1;
+        this.velocity = new Vector2();
+        this.bulletV.set(2f, 0);
+        this.hp = HP;
+        this.rateOfFire = 5;
     }
 
     @Override
@@ -48,7 +43,6 @@ public class Plane extends Sprite {
         this.worldBounds = worldBounds;
         setHeightProportion(worldBounds.getHeight() / SCALE);
         pos.set(worldBounds.pos);
-        velocity = new Vector2();
     }
 
     @Override
@@ -67,7 +61,7 @@ public class Plane extends Sprite {
         if (shootPressed) {
             if(rateTimer == 0) {
                 shoot();
-                rateTimer = RATE_OF_FIRE;
+                rateTimer = rateOfFire;
             } else {
                 rateTimer--;
             }
@@ -91,7 +85,8 @@ public class Plane extends Sprite {
         this.velocity = velocity;
     }
 
-    private void shoot() {
+
+    protected void shoot() {
         Bullet bullet = bulletPool.obtain();
         bulletPos.set(getRight(), pos.y);
         bullet.set(this, bulletRegion, bulletPos, bulletV, worldBounds, 1, 0.05f);
@@ -99,8 +94,8 @@ public class Plane extends Sprite {
     }
 
     public void dispose() {
-        barrelSound.dispose();
+        if (barrelSound != null) {
+            barrelSound.dispose();
+        }
     }
-
-
 }
