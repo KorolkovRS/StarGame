@@ -2,6 +2,7 @@ package ru.korolkovrs.screen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -24,7 +25,6 @@ public class MenuScreen extends BaseScreen {
 
     private TextureAtlas atlas;
     private Texture bg;
-    private Texture gr;
 
     private Background background;
     private Ground ground;
@@ -34,19 +34,21 @@ public class MenuScreen extends BaseScreen {
     private PlayButton playButton;
     private Plane plane;
 
+    private Music music;
+
     public MenuScreen(Game game) {
         this.game = game;
+        music = Gdx.audio.newMusic(Gdx.files.internal("sounds\\music.mp3"));
     }
 
     @Override
     public void show() {
         super.show();
-        atlas = new TextureAtlas("textures\\menuAtlas.atlas");
+        atlas = new TextureAtlas("textures\\menuAtlas.pack");
         bg = new Texture("textures\\background.png");
-        gr = new Texture("textures\\groundDirt.png");
 
         background = new Background(new TextureRegion(bg));
-        ground = new Ground(new TextureRegion(gr));
+        ground = new Ground(atlas);
 
         clouds = new Cloud[CLOUD_COUNT];
         for (int i = 0; i < clouds.length; i++) {
@@ -82,9 +84,10 @@ public class MenuScreen extends BaseScreen {
     @Override
     public void dispose() {
         bg.dispose();
-        gr.dispose();
         atlas.dispose();
         super.dispose();
+        plane.dispose();
+        music.dispose();
     }
 
     @Override
@@ -105,6 +108,8 @@ public class MenuScreen extends BaseScreen {
         for (Cloud cloud : clouds) {
             cloud.update(delta);
         }
+
+        ground.update(delta);
     }
 
     private void draw() {
@@ -120,5 +125,6 @@ public class MenuScreen extends BaseScreen {
         plane.draw(batch);
         playButton.draw(batch);
         batch.end();
+        music.play();
     }
 }

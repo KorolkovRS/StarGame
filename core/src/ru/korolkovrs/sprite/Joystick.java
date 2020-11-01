@@ -8,8 +8,8 @@ import ru.korolkovrs.math.Rect;
 
 public class Joystick extends BaseButton {
     private static final float MARGIN = 0.2f;
-    private static final float V_LEN = 0.05f;
-    private static final float MAX_LEN = 0.015f;
+    private static final float V_LEN = 3f;
+    private static final float MAX_LEN = 1f;
 
     private Plane plane;
 
@@ -42,6 +42,7 @@ public class Joystick extends BaseButton {
         }
         planeVelocity.set(touch);
         plane.setVelocity(planeVelocity);
+        System.out.println("Vel = " + planeVelocity.len());
         return false;
     }
 

@@ -1,0 +1,40 @@
+
+menuAtlas.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+groundDirt
+  rotate: false
+  xy: 1, 382
+  size: 1616, 71
+  orig: 1616, 71
+  offset: 0, 0
+  index: -1
+btPlay
+  rotate: false
+  xy: 1, 124
+  size: 234, 256
+  orig: 234, 256
+  offset: 0, 0
+  index: -1
+btExit
+  rotate: false
+  xy: 237, 146
+  size: 234, 234
+  orig: 234, 234
+  offset: 0, 0
+  index: -1
+cloud1
+  rotate: false
+  xy: 1, 1
+  size: 203, 121
+  orig: 203, 121
+  offset: 0, 0
+  index: -1
+yellowPlane
+  rotate: false
+  xy: 473, 307
+  size: 88, 73
+  orig: 88, 73
+  offset: 0, 0
+  index: -1

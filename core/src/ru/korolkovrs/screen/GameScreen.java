@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import ru.korolkovrs.base.BaseScreen;
 import ru.korolkovrs.math.Rect;
+import ru.korolkovrs.pool.BulletPool;
 import ru.korolkovrs.sprite.Background;
 import ru.korolkovrs.sprite.Cloud;
 import ru.korolkovrs.sprite.Ground;
@@ -19,13 +20,13 @@ public class GameScreen extends BaseScreen {
 
     private TextureAtlas atlas;
     private Texture bg;
-    private Texture gr;
 
     private Background background;
     private Ground ground;
 
     private Cloud[] clouds;
     private Plane plane;
+    private BulletPool bulletPool;
     private Joystick joy;
 
     @Override
@@ -33,17 +34,16 @@ public class GameScreen extends BaseScreen {
         super.show();
         atlas = new TextureAtlas("textures\\mainAtlas.pack");
         bg = new Texture("textures\\background.png");
-        gr = new Texture("textures\\groundDirt.png");
 
         background = new Background(new TextureRegion(bg));
-        ground = new Ground(new TextureRegion(gr));
+        ground = new Ground(atlas);
 
         clouds = new Cloud[CLOUD_COUNT];
         for (int i = 0; i < clouds.length; i++) {
             clouds[i] = new Cloud(atlas);
         }
-
-        plane = new Plane(atlas);
+        bulletPool = new BulletPool();
+        plane = new Plane(atlas, bulletPool);
         joy = new Joystick(atlas, this.plane);
     }
 
@@ -51,14 +51,16 @@ public class GameScreen extends BaseScreen {
     public void render(float delta) {
         super.render(delta);
         update(delta);
+        checkCollision();
+        freeAllDestroyed();
         draw();
     }
 
     @Override
     public void resize(Rect worldBounds) {
+        super.resize(worldBounds);
         background.resize(worldBounds);
         ground.resize(worldBounds);
-
         for (Cloud cloud : clouds) {
             cloud.resize(worldBounds);
         }
@@ -69,22 +71,25 @@ public class GameScreen extends BaseScreen {
     @Override
     public void dispose() {
         bg.dispose();
-        gr.dispose();
         atlas.dispose();
+        bulletPool.dispose();
+        plane.dispose();
         super.dispose();
     }
 
     @Override
     public boolean keyDown(int keycode) {
-        return super.keyDown(keycode);
+        plane.keyDown(keycode);
+        return false;
     }
 
     @Override
-    public boolean keyTyped(char character) {
-        return super.keyTyped(character);
+    public boolean keyUp(int keycode) {
+        plane.keyUp(keycode);
+        return false;
     }
 
-        @Override
+    @Override
     public boolean touchDown(Vector2 touch, int pointer, int button) {
         joy.touchDown(touch, pointer, button);
         return false;
@@ -107,9 +112,13 @@ public class GameScreen extends BaseScreen {
     }
 
     private void update(float delta) {
+        plane.update(delta);
+
         for (Cloud cloud : clouds) {
             cloud.update(delta);
         }
+        ground.update(delta);
+        bulletPool.updateActiveSprites(delta);
     }
 
     private void draw() {
@@ -123,6 +132,11 @@ public class GameScreen extends BaseScreen {
 
         plane.draw(batch);
         joy.draw(batch);
+        bulletPool.drawActiveSprites(batch);
         batch.end();
+    }
+
+    private void freeAllDestroyed() {
+        bulletPool.freeAllDestroyedActiveSprites();
     }
 }
