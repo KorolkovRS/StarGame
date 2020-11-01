@@ -14,18 +14,18 @@ import ru.korolkovrs.base.Sprite;
 import ru.korolkovrs.math.Rect;
 import ru.korolkovrs.pool.BulletPool;
 
-public class Plane extends Aircraft {
+public class MyPlane extends Aircraft {
 
     private static final int SCALE = 10;
     private static final int HP = 100;
 
     private boolean shootPressed;
 
-    public Plane(TextureAtlas atlas) {
+    public MyPlane(TextureAtlas atlas) {
         super(atlas.findRegion("yellowPlane"));
     }
 
-    public Plane(TextureAtlas atlas, BulletPool bulletPool) {
+    public MyPlane(TextureAtlas atlas, BulletPool bulletPool) {
         super(atlas.findRegion("yellowPlane"));
         this.bulletPool = bulletPool;
         this.bulletRegion = atlas.findRegion("myBullet");
@@ -48,13 +48,16 @@ public class Plane extends Aircraft {
     @Override
     public void update(float delta) {
         pos.mulAdd(velocity, delta);
-        if (getLeft() < worldBounds.getLeft()) {
+        if (getLeft() <= worldBounds.getLeft()) {
             setLeft(worldBounds.getLeft());
-        } else if (getRight() > worldBounds.getRight()) {
+        }
+        if (getRight() >= worldBounds.getRight()) {
             setRight(worldBounds.getRight());
-        } else if (getTop() > worldBounds.getTop()) {
+        }
+        if (getTop() >= worldBounds.getTop()) {
             setTop(worldBounds.getTop());
-        } else if (getBottom() < worldBounds.getBottom()) {
+        }
+        if (getBottom() <= worldBounds.getBottom()) {
             setBottom(worldBounds.getBottom());
         }
 

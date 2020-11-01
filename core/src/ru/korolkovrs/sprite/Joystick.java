@@ -11,14 +11,14 @@ public class Joystick extends BaseButton {
     private static final float V_LEN = 3f;
     private static final float MAX_LEN = 1f;
 
-    private Plane plane;
+    private MyPlane myPlane;
 
     private Vector2 planeVelocity;
     private Vector2 temp;
 
-    public Joystick(TextureAtlas atlas, Plane plane) {
+    public Joystick(TextureAtlas atlas, MyPlane myPlane) {
         super(atlas.findRegion("joy"));
-        this.plane = plane;
+        this.myPlane = myPlane;
         planeVelocity = new Vector2();
         temp = new Vector2();
     }
@@ -41,8 +41,8 @@ public class Joystick extends BaseButton {
             touch.setLength(MAX_LEN);
         }
         planeVelocity.set(touch);
-        plane.setVelocity(planeVelocity);
-        System.out.println("Vel = " + planeVelocity.len());
+        myPlane.setVelocity(planeVelocity);
+        //System.out.println("Vel = " + planeVelocity.len());
         return false;
     }
 
@@ -60,7 +60,7 @@ public class Joystick extends BaseButton {
     @Override
     public void touchUpAction() {
         planeVelocity.setLength(0);
-        plane.setVelocity(planeVelocity);
+        myPlane.setVelocity(planeVelocity);
     }
 }
 

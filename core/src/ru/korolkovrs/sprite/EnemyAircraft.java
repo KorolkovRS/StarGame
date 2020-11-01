@@ -1,22 +1,29 @@
 package ru.korolkovrs.sprite;
 
+import com.badlogic.gdx.math.Vector2;
+
 import ru.korolkovrs.base.EnemySettingsDto;
 import ru.korolkovrs.base.Aircraft;
 import ru.korolkovrs.math.Rect;
 import ru.korolkovrs.pool.BulletPool;
 
 public class EnemyAircraft extends Aircraft {
+    private final static float V_RIDE_OUT = -0.5f;
+
+    protected Vector2 rideOutVelocity;
+
     public EnemyAircraft(BulletPool bulletPool, Rect worldBounds) {
         this.bulletPool = bulletPool;
         this.worldBounds = worldBounds;
+        rideOutVelocity = new Vector2(V_RIDE_OUT, 0);
     }
 
     @Override
     public void update(float delta) {
-        bulletPos.set(pos.x, getBottom());
-        super.update(delta);
-        if (getBottom() < worldBounds.getBottom()) {
-            destroy();
+        if (worldBounds.getRight() < getRight()) {
+            rideOut(delta);
+        } else {
+            doAction(delta);
         }
     }
 
@@ -28,7 +35,7 @@ public class EnemyAircraft extends Aircraft {
         this.bulletV.set(settings.getBulletV());
         this.barrelSound = settings.getBulletSound();
         this.damage = settings.getDamage();
-        this.rateTimer = settings.getReloadInterval();
+        this.rateOfFire = settings.getReloadInterval();
         setHeightProportion(settings.getHeight());
         this.hp = settings.getHp();
     }
@@ -38,5 +45,23 @@ public class EnemyAircraft extends Aircraft {
         Bullet bullet = bulletPool.obtain();
         bullet.set(this, bulletRegion, bulletPos, bulletV, worldBounds, damage, bulletHeight);
         barrelSound.play();
+    }
+
+    private void rideOut(float delta) {
+        super.update(delta);
+        pos.mulAdd(rideOutVelocity, delta);
+    }
+
+    private void doAction(float delta) {
+        bulletPos.set(getLeft(), pos.y);
+        super.update(delta);
+        pos.mulAdd(velocity, delta);
+
+        if (rateTimer == 0) {
+            shoot();
+            rateTimer = rateOfFire;
+        } else {
+            rateTimer--;
+        }
     }
 }

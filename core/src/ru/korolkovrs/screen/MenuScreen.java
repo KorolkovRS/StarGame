@@ -14,7 +14,7 @@ import ru.korolkovrs.sprite.Background;
 import ru.korolkovrs.sprite.Cloud;
 import ru.korolkovrs.sprite.ExitButton;
 import ru.korolkovrs.sprite.Ground;
-import ru.korolkovrs.sprite.Plane;
+import ru.korolkovrs.sprite.MyPlane;
 import ru.korolkovrs.sprite.PlayButton;
 
 public class MenuScreen extends BaseScreen {
@@ -32,13 +32,14 @@ public class MenuScreen extends BaseScreen {
     private Cloud[] clouds;
     private ExitButton exitButton;
     private PlayButton playButton;
-    private Plane plane;
+    private MyPlane myPlane;
 
     private Music music;
 
     public MenuScreen(Game game) {
         this.game = game;
         music = Gdx.audio.newMusic(Gdx.files.internal("sounds\\music.mp3"));
+        music.setLooping(true);
     }
 
     @Override
@@ -57,7 +58,7 @@ public class MenuScreen extends BaseScreen {
 
         exitButton = new ExitButton(atlas);
         playButton = new PlayButton(atlas, game);
-        plane = new Plane(atlas);
+        myPlane = new MyPlane(atlas);
     }
 
     @Override
@@ -78,7 +79,7 @@ public class MenuScreen extends BaseScreen {
 
         exitButton.resize(worldBounds);
         playButton.resize(worldBounds);
-        plane.resize(worldBounds);
+        myPlane.resize(worldBounds);
     }
 
     @Override
@@ -86,7 +87,7 @@ public class MenuScreen extends BaseScreen {
         bg.dispose();
         atlas.dispose();
         super.dispose();
-        plane.dispose();
+        myPlane.dispose();
         music.dispose();
     }
 
@@ -122,7 +123,7 @@ public class MenuScreen extends BaseScreen {
         }
 
         exitButton.draw(batch);
-        plane.draw(batch);
+        myPlane.draw(batch);
         playButton.draw(batch);
         batch.end();
         music.play();
