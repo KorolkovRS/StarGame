@@ -1,49 +1,106 @@
 package ru.korolkovrs.sprite;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
+import ru.korolkovrs.base.BaseScreen;
 import ru.korolkovrs.base.Sprite;
 import ru.korolkovrs.math.Rect;
+import ru.korolkovrs.pool.BulletPool;
 
 public class Plane extends Sprite {
 
-    private int SCALE = 10;
-    private float V_LEN = 0.01f;
-    private Vector2 touch;
+    private static final int SCALE = 10;
+    private static final int RATE_OF_FIRE = 5;
+
+    private Rect worldBounds;
     private Vector2 velocity;
-    private Vector2 temp;
 
+    private BulletPool bulletPool;
+    private TextureRegion bulletRegion;
 
-    public Plane(TextureRegion region) {
-        super(region);
+    private final Vector2 bulletV = new Vector2(2f, 0);
+    private final Vector2 bulletPos = new Vector2();
+
+    private boolean shootPressed;
+    private int rateTimer;
+
+    private Sound barrelSound;
+
+    public Plane(TextureAtlas atlas) {
+        super(atlas.findRegion("yellowPlane"));
+        barrelSound = Gdx.audio.newSound(Gdx.files.internal("sounds\\bullet.wav"));
+    }
+
+    public Plane(TextureAtlas atlas, BulletPool bulletPool) {
+        this(atlas);
+        this.bulletPool = bulletPool;
+        this.bulletRegion = atlas.findRegion("myBullet");
     }
 
     @Override
     public void resize(Rect worldBounds) {
+        this.worldBounds = worldBounds;
         setHeightProportion(worldBounds.getHeight() / SCALE);
         pos.set(worldBounds.pos);
         velocity = new Vector2();
-        temp = new Vector2();
-        touch = new Vector2();
     }
 
     @Override
-    public void draw(SpriteBatch batch) {
-        temp = pos.cpy().sub(touch);
-        if (temp.len() >= velocity.len()) {
-            pos.add(velocity);
-        } else {
-            pos.set(touch);
+    public void update(float delta) {
+        pos.mulAdd(velocity, delta);
+        if (getLeft() < worldBounds.getLeft()) {
+            setLeft(worldBounds.getLeft());
+        } else if (getRight() > worldBounds.getRight()) {
+            setRight(worldBounds.getRight());
+        } else if (getTop() > worldBounds.getTop()) {
+            setTop(worldBounds.getTop());
+        } else if (getBottom() < worldBounds.getBottom()) {
+            setBottom(worldBounds.getBottom());
         }
-        super.draw(batch);
+
+        if (shootPressed) {
+            if(rateTimer == 0) {
+                shoot();
+                rateTimer = RATE_OF_FIRE;
+            } else {
+                rateTimer--;
+            }
+        }
     }
 
-    @Override
-    public boolean touchDown(Vector2 touch, int pointer, int button) {
-        this.touch.set(touch);
-        velocity = touch.cpy().sub(pos).setLength(V_LEN);
-        return super.touchDown(touch, pointer, button);
+    public boolean keyDown(int keycode) {
+        if (keycode == Input.Keys.SPACE) {
+            shootPressed = true;
+        }
+        return false;
     }
+
+    public boolean keyUp(int keycode) {
+        shootPressed = false;
+        rateTimer = 0;
+        return false;
+    }
+
+    public void setVelocity(Vector2 velocity) {
+        this.velocity = velocity;
+    }
+
+    private void shoot() {
+        Bullet bullet = bulletPool.obtain();
+        bulletPos.set(getRight(), pos.y);
+        bullet.set(this, bulletRegion, bulletPos, bulletV, worldBounds, 1, 0.05f);
+        barrelSound.play(1.0f);
+    }
+
+    public void dispose() {
+        barrelSound.dispose();
+    }
+
+
 }
