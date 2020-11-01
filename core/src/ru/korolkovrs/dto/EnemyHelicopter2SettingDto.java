@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.korolkovrs.base.EnemySettingsDto;
-import ru.korolkovrs.sprite.EnemyAircraft;
 import ru.korolkovrs.utils.Regions;
 
 public class EnemyHelicopter2SettingDto extends EnemySettingsDto {

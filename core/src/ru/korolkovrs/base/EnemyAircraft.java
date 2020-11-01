@@ -1,21 +1,23 @@
-package ru.korolkovrs.sprite;
+package ru.korolkovrs.base;
 
 import com.badlogic.gdx.math.Vector2;
 
-import ru.korolkovrs.base.EnemySettingsDto;
-import ru.korolkovrs.base.Aircraft;
 import ru.korolkovrs.math.Rect;
 import ru.korolkovrs.pool.BulletPool;
+import ru.korolkovrs.sprite.Bullet;
+import ru.korolkovrs.sprite.Ground;
 
-public class EnemyAircraft extends Aircraft {
+public abstract class EnemyAircraft extends Aircraft {
     private final static float V_RIDE_OUT = -0.5f;
+    protected Ground ground;
 
     protected Vector2 rideOutVelocity;
 
-    public EnemyAircraft(BulletPool bulletPool, Rect worldBounds) {
+    public EnemyAircraft(BulletPool bulletPool, Rect worldBounds, Ground ground) {
         this.bulletPool = bulletPool;
         this.worldBounds = worldBounds;
         rideOutVelocity = new Vector2(V_RIDE_OUT, 0);
+        this.ground = ground;
     }
 
     @Override
@@ -48,20 +50,8 @@ public class EnemyAircraft extends Aircraft {
     }
 
     private void rideOut(float delta) {
-        super.update(delta);
         pos.mulAdd(rideOutVelocity, delta);
     }
 
-    private void doAction(float delta) {
-        bulletPos.set(getLeft(), pos.y);
-        super.update(delta);
-        pos.mulAdd(velocity, delta);
-
-        if (rateTimer == 0) {
-            shoot();
-            rateTimer = rateOfFire;
-        } else {
-            rateTimer--;
-        }
-    }
+    protected abstract void doAction(float delta);
 }
