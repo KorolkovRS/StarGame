@@ -4,12 +4,12 @@ import ru.korolkovrs.base.SpritesPool;
 import ru.korolkovrs.math.Rect;
 import ru.korolkovrs.sprite.EnemyAircraft;
 
-public class EnemyShipPool extends SpritesPool<EnemyAircraft> {
+public class EnemyAircraftPool extends SpritesPool<EnemyAircraft> {
 
     private BulletPool bulletPool;
     private Rect worldBounds;
 
-    public EnemyShipPool(BulletPool bulletPool, Rect worldBounds) {
+    public EnemyAircraftPool(BulletPool bulletPool, Rect worldBounds) {
         this.bulletPool = bulletPool;
         this.worldBounds = worldBounds;
     }
