@@ -1,5 +1,7 @@
 package ru.korolkovrs.screen;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -8,11 +10,14 @@ import com.badlogic.gdx.math.Vector2;
 import ru.korolkovrs.base.BaseScreen;
 import ru.korolkovrs.math.Rect;
 import ru.korolkovrs.pool.BulletPool;
+import ru.korolkovrs.pool.EnemyHelicopter1Pool;
+import ru.korolkovrs.pool.EnemyPlanePool;
 import ru.korolkovrs.sprite.Background;
 import ru.korolkovrs.sprite.Cloud;
 import ru.korolkovrs.sprite.Ground;
 import ru.korolkovrs.sprite.Joystick;
-import ru.korolkovrs.sprite.Plane;
+import ru.korolkovrs.sprite.MyPlane;
+import ru.korolkovrs.utils.EnemyEmitter;
 
 public class GameScreen extends BaseScreen {
 
@@ -20,20 +25,27 @@ public class GameScreen extends BaseScreen {
 
     private TextureAtlas atlas;
     private Texture bg;
+    private Sound enemyBarrelSound;
 
     private Background background;
     private Ground ground;
 
     private Cloud[] clouds;
-    private Plane plane;
+    private MyPlane myPlane;
     private BulletPool bulletPool;
     private Joystick joy;
+
+    private EnemyPlanePool enemyPlanePool;
+    private EnemyHelicopter1Pool enemyHelicopter1Pool;
+
+    private EnemyEmitter enemyEmitter;
 
     @Override
     public void show() {
         super.show();
         atlas = new TextureAtlas("textures\\mainAtlas.pack");
         bg = new Texture("textures\\background.png");
+        enemyBarrelSound = Gdx.audio.newSound(Gdx.files.internal("sounds\\bullet.wav"));
 
         background = new Background(new TextureRegion(bg));
         ground = new Ground(atlas);
@@ -42,9 +54,15 @@ public class GameScreen extends BaseScreen {
         for (int i = 0; i < clouds.length; i++) {
             clouds[i] = new Cloud(atlas);
         }
+
         bulletPool = new BulletPool();
-        plane = new Plane(atlas, bulletPool);
-        joy = new Joystick(atlas, this.plane);
+        enemyPlanePool = new EnemyPlanePool(bulletPool, worldBounds, ground);
+        enemyHelicopter1Pool = new EnemyHelicopter1Pool(bulletPool, worldBounds, ground);
+
+        myPlane = new MyPlane(atlas, bulletPool);
+        joy = new Joystick(atlas, this.myPlane);
+
+        enemyEmitter = new EnemyEmitter(worldBounds, enemyPlanePool,enemyHelicopter1Pool , enemyBarrelSound, atlas, ground);
     }
 
     @Override
@@ -64,7 +82,7 @@ public class GameScreen extends BaseScreen {
         for (Cloud cloud : clouds) {
             cloud.resize(worldBounds);
         }
-        plane.resize(worldBounds);
+        myPlane.resize(worldBounds);
         joy.resize(worldBounds);
     }
 
@@ -73,19 +91,22 @@ public class GameScreen extends BaseScreen {
         bg.dispose();
         atlas.dispose();
         bulletPool.dispose();
-        plane.dispose();
+        myPlane.dispose();
+        enemyBarrelSound.dispose();
+        enemyPlanePool.dispose();
+        enemyHelicopter1Pool.dispose();
         super.dispose();
     }
 
     @Override
     public boolean keyDown(int keycode) {
-        plane.keyDown(keycode);
+        myPlane.keyDown(keycode);
         return false;
     }
 
     @Override
     public boolean keyUp(int keycode) {
-        plane.keyUp(keycode);
+        myPlane.keyUp(keycode);
         return false;
     }
 
@@ -112,13 +133,16 @@ public class GameScreen extends BaseScreen {
     }
 
     private void update(float delta) {
-        plane.update(delta);
+        myPlane.update(delta);
 
         for (Cloud cloud : clouds) {
             cloud.update(delta);
         }
         ground.update(delta);
         bulletPool.updateActiveSprites(delta);
+        enemyPlanePool.updateActiveSprites(delta);
+        enemyHelicopter1Pool.updateActiveSprites(delta);
+        enemyEmitter.generate(delta);
     }
 
     private void draw() {
@@ -130,13 +154,17 @@ public class GameScreen extends BaseScreen {
             cloud.draw(batch);
         }
 
-        plane.draw(batch);
+        myPlane.draw(batch);
         joy.draw(batch);
         bulletPool.drawActiveSprites(batch);
+        enemyPlanePool.drawActiveSprites(batch);
+        enemyHelicopter1Pool.drawActiveSprites(batch);
         batch.end();
     }
 
     private void freeAllDestroyed() {
         bulletPool.freeAllDestroyedActiveSprites();
+        enemyPlanePool.freeAllDestroyedActiveSprites();
+        enemyHelicopter1Pool.freeAllDestroyedActiveSprites();
     }
 }
