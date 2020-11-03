@@ -13,7 +13,11 @@ public class EnemyHelicopter2SettingDto extends EnemySettingsDto {
     private static final float ENEMY_BIG_BULLET_HEIGHT = 0.04f;
     private static final int ENEMY_BIG_DAMAGE = 10;
     private static final int ENEMY_BIG_RATE_OF_FIRE = 60;
+<<<<<<< HEAD
     private static final int ENEMY_BIG_HP = 3;
+=======
+    private static final int ENEMY_BIG_HP = 10;
+>>>>>>> 31b1b2f... Merge pull request #8 from KorolkovRS/lesson6
 
     public EnemyHelicopter2SettingDto(TextureAtlas atlas, Sound bulletSound) {
         TextureRegion enemy0 = atlas.findRegion("helicopter2");

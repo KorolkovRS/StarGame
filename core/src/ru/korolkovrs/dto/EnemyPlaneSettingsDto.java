@@ -12,7 +12,11 @@ public class EnemyPlaneSettingsDto extends EnemySettingsDto {
 
     private static final float ENEMY_BIG_HEIGHT = 0.1f;
     private static final float ENEMY_BIG_BULLET_HEIGHT = 0.04f;
+<<<<<<< HEAD
     private static final int ENEMY_BIG_DAMAGE = 5;
+=======
+    private static final int ENEMY_BIG_DAMAGE = 10;
+>>>>>>> 31b1b2f... Merge pull request #8 from KorolkovRS/lesson6
     private static final int ENEMY_BIG_RATE_OF_FIRE = 90;
     private static final int ENEMY_BIG_HP = 10;
 

@@ -18,7 +18,11 @@ import ru.korolkovrs.sprite.Ground;
 
 public class EnemyEmitter {
 
+<<<<<<< HEAD
     private static final float GENERATE_INTERVAL = 6f;
+=======
+    private static final float GENERATE_INTERVAL = 4f;
+>>>>>>> 31b1b2f... Merge pull request #8 from KorolkovRS/lesson6
 
     private Rect worldBounds;
     private EnemyPlanePool enemyPlanePool;

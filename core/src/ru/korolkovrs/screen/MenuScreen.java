@@ -29,9 +29,15 @@ public class MenuScreen extends BaseScreen {
     protected Background background;
     protected Ground ground;
 
+<<<<<<< HEAD
     protected Cloud[] clouds;
     protected ExitButton exitButton;
     protected PlayButton playButton;
+=======
+    private Cloud[] clouds;
+    private ExitButton exitButton;
+    private PlayButton playButton;
+>>>>>>> 31b1b2f... Merge pull request #8 from KorolkovRS/lesson6
     private MyPlane myPlane;
 
     protected Music music;

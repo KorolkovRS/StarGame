@@ -4,9 +4,13 @@ import com.badlogic.gdx.math.Vector2;
 
 import ru.korolkovrs.math.Rect;
 import ru.korolkovrs.pool.BulletPool;
+<<<<<<< HEAD
 import ru.korolkovrs.pool.ExplosionPool;
 import ru.korolkovrs.sprite.Bullet;
 import ru.korolkovrs.sprite.Explosion;
+=======
+import ru.korolkovrs.sprite.Bullet;
+>>>>>>> 31b1b2f... Merge pull request #8 from KorolkovRS/lesson6
 import ru.korolkovrs.sprite.Ground;
 
 public abstract class EnemyAircraft extends Aircraft {
@@ -15,12 +19,19 @@ public abstract class EnemyAircraft extends Aircraft {
 
     protected Vector2 rideOutVelocity;
 
+<<<<<<< HEAD
     public EnemyAircraft(BulletPool bulletPool, ExplosionPool explosionPool, Rect worldBounds, Ground ground) {
+=======
+    public EnemyAircraft(BulletPool bulletPool, Rect worldBounds, Ground ground) {
+>>>>>>> 31b1b2f... Merge pull request #8 from KorolkovRS/lesson6
         this.bulletPool = bulletPool;
         this.worldBounds = worldBounds;
         rideOutVelocity = new Vector2(V_RIDE_OUT, 0);
         this.ground = ground;
+<<<<<<< HEAD
         this.explosionPool = explosionPool;
+=======
+>>>>>>> 31b1b2f... Merge pull request #8 from KorolkovRS/lesson6
     }
 
     @Override
@@ -30,10 +41,13 @@ public abstract class EnemyAircraft extends Aircraft {
         } else {
             doAction(delta);
         }
+<<<<<<< HEAD
 
         if(getRight() < worldBounds.getLeft()) {
             destroy();
         }
+=======
+>>>>>>> 31b1b2f... Merge pull request #8 from KorolkovRS/lesson6
     }
 
     public void set(EnemySettingsDto settings) {
@@ -45,7 +59,11 @@ public abstract class EnemyAircraft extends Aircraft {
         this.barrelSound = settings.getBulletSound();
         this.damage = settings.getDamage();
         this.rateOfFire = settings.getReloadInterval();
+<<<<<<< HEAD
         this.setHeightProportion(settings.getHeight());
+=======
+        setHeightProportion(settings.getHeight());
+>>>>>>> 31b1b2f... Merge pull request #8 from KorolkovRS/lesson6
         this.hp = settings.getHp();
     }
 
@@ -61,6 +79,7 @@ public abstract class EnemyAircraft extends Aircraft {
     }
 
     protected abstract void doAction(float delta);
+<<<<<<< HEAD
 
     public boolean isBulletCollision(Rect bullet) {
         return !(
@@ -70,4 +89,6 @@ public abstract class EnemyAircraft extends Aircraft {
                         || bullet.getTop() < pos.y
         );
     }
+=======
+>>>>>>> 31b1b2f... Merge pull request #8 from KorolkovRS/lesson6
 }
