@@ -3,58 +3,79 @@ mainAtlas.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-groundDirt
+explosion
   rotate: false
-  xy: 1, 807
-  size: 1616, 71
-  orig: 1616, 71
+  xy: 1, 774
+  size: 900, 900
+  orig: 900, 900
   offset: 0, 0
-  index: -1
+  index: 0
 enemyPlane
   rotate: false
-  xy: 1, 325
+  xy: 903, 1194
   size: 960, 480
   orig: 960, 480
   offset: 0, 0
   index: -1
+groundDirt
+  rotate: false
+  xy: 1, 701
+  size: 1616, 71
+  orig: 1616, 71
+  offset: 0, 0
+  index: -1
 joy
   rotate: false
-  xy: 963, 325
+  xy: 1, 219
   size: 480, 480
   orig: 480, 480
   offset: 0, 0
   index: -1
 helicopter1
   rotate: false
-  xy: 1, 153
+  xy: 903, 1022
   size: 426, 170
   orig: 426, 170
   offset: 0, 0
   index: -1
 helicopter2
   rotate: false
-  xy: 1, 1
+  xy: 1, 67
   size: 423, 150
   orig: 423, 150
   offset: 0, 0
   index: -1
+message_game_over
+  rotate: false
+  xy: 483, 631
+  size: 493, 68
+  orig: 493, 68
+  offset: 0, 0
+  index: -1
+button_new_game
+  rotate: false
+  xy: 903, 964
+  size: 365, 56
+  orig: 365, 56
+  offset: 0, 0
+  index: -1
 cloud1
   rotate: false
-  xy: 429, 202
+  xy: 1331, 1071
   size: 203, 121
   orig: 203, 121
   offset: 0, 0
   index: -1
 yellowPlane
   rotate: false
-  xy: 1445, 732
+  xy: 1865, 1601
   size: 88, 73
   orig: 88, 73
   offset: 0, 0
   index: -1
 myBullet
   rotate: false
-  xy: 1619, 814
+  xy: 1, 1
   size: 64, 64
   orig: 64, 64
   offset: 0, 0

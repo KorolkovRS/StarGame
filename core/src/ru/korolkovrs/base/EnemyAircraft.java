@@ -4,7 +4,9 @@ import com.badlogic.gdx.math.Vector2;
 
 import ru.korolkovrs.math.Rect;
 import ru.korolkovrs.pool.BulletPool;
+import ru.korolkovrs.pool.ExplosionPool;
 import ru.korolkovrs.sprite.Bullet;
+import ru.korolkovrs.sprite.Explosion;
 import ru.korolkovrs.sprite.Ground;
 
 public abstract class EnemyAircraft extends Aircraft {
@@ -13,11 +15,12 @@ public abstract class EnemyAircraft extends Aircraft {
 
     protected Vector2 rideOutVelocity;
 
-    public EnemyAircraft(BulletPool bulletPool, Rect worldBounds, Ground ground) {
+    public EnemyAircraft(BulletPool bulletPool, ExplosionPool explosionPool, Rect worldBounds, Ground ground) {
         this.bulletPool = bulletPool;
         this.worldBounds = worldBounds;
         rideOutVelocity = new Vector2(V_RIDE_OUT, 0);
         this.ground = ground;
+        this.explosionPool = explosionPool;
     }
 
     @Override
@@ -26,6 +29,10 @@ public abstract class EnemyAircraft extends Aircraft {
             rideOut(delta);
         } else {
             doAction(delta);
+        }
+
+        if(getRight() < worldBounds.getLeft()) {
+            destroy();
         }
     }
 
@@ -38,7 +45,7 @@ public abstract class EnemyAircraft extends Aircraft {
         this.barrelSound = settings.getBulletSound();
         this.damage = settings.getDamage();
         this.rateOfFire = settings.getReloadInterval();
-        setHeightProportion(settings.getHeight());
+        this.setHeightProportion(settings.getHeight());
         this.hp = settings.getHp();
     }
 
@@ -54,4 +61,13 @@ public abstract class EnemyAircraft extends Aircraft {
     }
 
     protected abstract void doAction(float delta);
+
+    public boolean isBulletCollision(Rect bullet) {
+        return !(
+                bullet.getRight() < getLeft()
+                        || bullet.getLeft() > getRight()
+                        || bullet.getBottom() > getTop()
+                        || bullet.getTop() < pos.y
+        );
+    }
 }

@@ -3,17 +3,17 @@ package ru.korolkovrs.sprite;
 import ru.korolkovrs.base.EnemyAircraft;
 import ru.korolkovrs.math.Rect;
 import ru.korolkovrs.pool.BulletPool;
+import ru.korolkovrs.pool.ExplosionPool;
 
 public class EnemyHelicopter1 extends EnemyAircraft {
 
     private static final int BURST_LENGTH = 10;
 
     private boolean gunBurst;
-    private int gunBurstRateTimer;
     private int burstCount;
 
-    public EnemyHelicopter1(BulletPool bulletPool, Rect worldBounds, Ground ground) {
-        super(bulletPool, worldBounds, ground);
+    public EnemyHelicopter1(BulletPool bulletPool, ExplosionPool explosionPool, Rect worldBounds, Ground ground) {
+        super(bulletPool, explosionPool, worldBounds, ground);
     }
 
     @Override

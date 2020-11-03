@@ -26,6 +26,8 @@ public class PlayButton extends BaseButton {
 
     @Override
     public void touchUpAction() {
-        game.setScreen(new GameScreen());
+        GameScreen gameScreen = new GameScreen();
+        gameScreen.setGame(game);
+        game.setScreen(gameScreen);
     }
 }
