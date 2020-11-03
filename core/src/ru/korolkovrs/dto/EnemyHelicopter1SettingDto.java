@@ -11,9 +11,9 @@ import ru.korolkovrs.utils.Regions;
 public class EnemyHelicopter1SettingDto extends EnemySettingsDto {
     private static final float ENEMY_BIG_HEIGHT = 0.1f;
     private static final float ENEMY_BIG_BULLET_HEIGHT = 0.04f;
-    private static final int ENEMY_BIG_DAMAGE = 10;
+    private static final int ENEMY_BIG_DAMAGE = 3;
     private static final int ENEMY_BIG_RATE_OF_FIRE = 240;
-    private static final int ENEMY_BIG_HP = 10;
+    private static final int ENEMY_BIG_HP = 30;
 
     public EnemyHelicopter1SettingDto(TextureAtlas atlas, Sound bulletSound) {
         TextureRegion enemy0 = atlas.findRegion("helicopter1");

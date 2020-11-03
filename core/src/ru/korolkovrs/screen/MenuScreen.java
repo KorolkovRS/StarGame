@@ -23,18 +23,18 @@ public class MenuScreen extends BaseScreen {
 
     private Game game;
 
-    private TextureAtlas atlas;
+    protected TextureAtlas atlas;
     private Texture bg;
 
-    private Background background;
-    private Ground ground;
+    protected Background background;
+    protected Ground ground;
 
-    private Cloud[] clouds;
-    private ExitButton exitButton;
-    private PlayButton playButton;
+    protected Cloud[] clouds;
+    protected ExitButton exitButton;
+    protected PlayButton playButton;
     private MyPlane myPlane;
 
-    private Music music;
+    protected Music music;
 
     public MenuScreen(Game game) {
         this.game = game;
@@ -113,7 +113,7 @@ public class MenuScreen extends BaseScreen {
         ground.update(delta);
     }
 
-    private void draw() {
+    protected void draw() {
         batch.begin();
         background.draw(batch);
         ground.draw(batch);

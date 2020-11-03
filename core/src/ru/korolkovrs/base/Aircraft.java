@@ -6,11 +6,16 @@ import com.badlogic.gdx.math.Vector2;
 
 import ru.korolkovrs.math.Rect;
 import ru.korolkovrs.pool.BulletPool;
+import ru.korolkovrs.pool.ExplosionPool;
+import ru.korolkovrs.sprite.Explosion;
 
 public abstract class Aircraft extends Sprite {
 
+    private static final float DAMAGE_ANIMATE_INTERVAL = 0.1f;
+
     protected Rect worldBounds;
     protected BulletPool bulletPool;
+    protected ExplosionPool explosionPool;
     protected TextureRegion bulletRegion;
     protected Sound barrelSound;
     protected float bulletHeight;
@@ -24,6 +29,8 @@ public abstract class Aircraft extends Sprite {
     protected int rateOfFire;
 
     protected int hp;
+
+    private float damageAnimateTimer = DAMAGE_ANIMATE_INTERVAL;
 
     public Aircraft() {
         velocity = new Vector2();
@@ -42,9 +49,39 @@ public abstract class Aircraft extends Sprite {
     public void update(float delta) {
         super.update(delta);
         pos.mulAdd(velocity, delta);
+
+        damageAnimateTimer += delta;
+        if (damageAnimateTimer >= DAMAGE_ANIMATE_INTERVAL) {
+            frame = 0;
+        }
     }
 
     protected abstract void shoot();
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        boom();
+    }
+
+    private void boom() {
+        Explosion explosion = explosionPool.obtain();
+        explosion.set(getHeight(), pos);
+    }
+
+    public void damage(int damage) {
+        damageAnimateTimer = 0f;
+        hp -= damage;
+        System.out.println(getClass().getName() + ": HP = " + hp);
+        if (hp <= 0) {
+            hp = 0;
+            destroy();
+        }
+    }
+
+    public int getDamage() {
+        return damage;
+    }
 }
 
 
